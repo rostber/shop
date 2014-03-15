@@ -1,0 +1,45 @@
+.file {
+ padding-left: 20px;
+ background: transparent url('../views/admin/img/file.gif') left top no-repeat;
+}
+.folder {
+ padding-left: 20px;
+ background: transparent url('../views/admin/img/folder.gif') left top no-repeat;
+}
+
+.check, .not_check, .delete, .edit, .sort, .info, .delete_image,
+.check:hover, .not_check:hover, .delete:hover, .edit:hover, .delete_image:hover {
+ text-decoration: none;
+ width: 16px;
+ height: 16px;
+ display: inline-block;
+ vertical-align: middle;
+ cursor: pointer;
+}
+.check {
+ background: transparent url('../views/admin/img/check.gif') left top no-repeat;
+}
+.not_check {
+ background: transparent url('../views/admin/img/not_check.gif') left top no-repeat;
+}
+.edit {
+ background: transparent url('../views/admin/img/edit.gif') left top no-repeat;
+}
+.delete {
+ background: transparent url('../views/admin/img/delete.gif') left top no-repeat;
+}
+.info {
+ background: transparent url('../views/admin/img/file.gif') left top no-repeat;
+}
+.delete_image {
+ background: transparent url('../views/admin/img/image_delete.gif') left top no-repeat;
+}
+
+section.title h4 a, section.title h4 span {
+ float: none;
+}
+
+.sort { 
+ background: url(../../../../../system/cms/themes/pyrocms/img/icons/cursor_drag_arrow.png) no-repeat; 
+ cursor: move;
+}
