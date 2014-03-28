@@ -111,6 +111,8 @@ class shop extends Public_Controller {
 		}
 	}
 	
+	/* оформление заказа */
+	
 	function cart()
 	{
 		if (!empty ($_COOKIE['cart'])) $this->data->items = $this->shop_m->set_prices( $this->shop_cart_m->get_cart_items($_COOKIE['cart']) );
@@ -253,10 +255,6 @@ class shop extends Public_Controller {
 			$this->data->rec_bik = $this->config->item('shop.rec_bik');
 			$this->data->rec_kor_sch = $this->config->item('shop.rec_kor_sch');
 			$this->data->rec_title = $this->config->item('shop.rec_title');
-			$this->data->rec_name1 = $this->config->item('shop.rec_name1');
-			$this->data->rec_name2 = $this->config->item('shop.rec_name2');
-			$this->data->rec_dol1 = $this->config->item('shop.rec_dol1');
-			$this->data->rec_dol2 = $this->config->item('shop.rec_dol2');
 			$this->data->rec_company = $this->config->item('shop.rec_company');
 			
 			if (!empty ($_COOKIE['cart'])) $this->data->items = $this->shop_m->set_prices( $this->shop_cart_m->get_cart_items($_COOKIE['cart']) );
@@ -270,51 +268,6 @@ class shop extends Public_Controller {
 		
 			$this->template->build('shop/checkout/finish', $this->data);
 		}
-	}
-	
-	function blank_ur()
-	{
-		if (!isset($_COOKIE['type_payment']) or !isset($_COOKIE['type_delavery'])) show_404();
-		
-		
-		$this->data->name = !empty($_COOKIE['name']) ? $_COOKIE['name'] : null;
-		$this->data->id = $this->shop_cart_m->next_insert_id('shop_orders');
-		$this->data->rec_inn = $this->config->item('shop.rec_inn');
-		$this->data->rec_kpp = $this->config->item('shop.rec_kpp');
-		$this->data->rec_num = $this->config->item('shop.rec_num');
-		$this->data->rec_bank_address = $this->config->item('shop.rec_bank_address');
-		$this->data->rec_bik = $this->config->item('shop.rec_bik');
-		$this->data->rec_kor_sch = $this->config->item('shop.rec_kor_sch');
-		$this->data->rec_kor_ogrn = $this->config->item('shop.rec_kor_ogrn');
-		$this->data->rec_title = $this->config->item('shop.rec_title');
-		$this->data->rec_name1 = $this->config->item('shop.rec_name1');
-		$this->data->rec_name2 = $this->config->item('shop.rec_name2');
-		$this->data->rec_dol1 = $this->config->item('shop.rec_dol1');
-		$this->data->rec_dol2 = $this->config->item('shop.rec_dol2');
-		$this->data->rec_company = $this->config->item('shop.rec_company');
-		$this->data->rec_shtamp = $this->config->item('shop.rec_shtamp');
-		
-		$this->data->conf_nds = $this->config->item('shop.nds');
-		
-		if (!empty ($_COOKIE['cart'])) $this->data->items = $this->shop_m->set_prices( $this->shop_cart_m->get_cart_items($_COOKIE['cart']) );
-		else $this->data->items = array();
-		
-		$this->data->total = 0;
-		foreach ($this->data->items as $k=>$v)
-		{
-			$this->data->total = $this->data->total + $v->price*$v->num;
-		}
-		$this->data->nds = round(($this->data->total*$this->data->conf_nds), 2);
-		$this->data->total_nds = round(($this->data->total), 2);
-		$this->data->total_prop = $this->shop_cart_m->num2str( $this->data->total_nds );
-		
-		$this->data->order_id = $this->insert_order( $this->data->items );
-		
-		$this->data->blank = $this->load->view('shop/pay_blank_ur', $this->data, TRUE);
-		
-		$this->update_order($this->data->blank, $this->data->order_id);
-		
-		$this->template->build('shop/checkout/finish', $this->data);
 	}
 	
 	/* / формы оплаты */

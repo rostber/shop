@@ -74,7 +74,7 @@ class Module_shop extends Module {
 			  `title` varchar(255) NOT NULL,
 			  `text` text,
 			  `parent_group_id` int(11) NOT NULL default 0,
-			  `file` varchar(255) NULL default NULL,=
+			  `file` varchar(255) NULL default NULL,
 			  `order` int(11) NOT NULL default 0,
 			  `created_on` int(11) NOT NULL default 0,
 			  `updated_on` int(11) NOT NULL default 0,
@@ -186,18 +186,67 @@ class Module_shop extends Module {
 		");
 		
 		$this->db->query("
+			INSERT INTO `".$this->db->dbprefix('shop_type_payments')."` (
+			  `id`,
+			  `title`,
+			  `redirect`,
+			  `published`
+			)
+			VALUES (
+			  1,
+			  'Наличными',
+			  'finish',
+			  1
+			),
+			(
+			  2,
+			  'Банковская квитанция',
+			  'blank',
+			  1
+			),
+			(
+			  3,
+			  'Безналичный расчет',
+			  'pay',
+			  0
+			);
+		");
+		
+		$this->db->query("
 			CREATE TABLE `".$this->db->dbprefix('shop_type_delavery')."` (
 			  `id` int(11) NOT NULL AUTO_INCREMENT,
 			  `title` varchar(255) NOT NULL,
 			  `text` text,
+			  `price` DECIMAL (11,2) NOT NULL default 0,
 			  `order` int(11) NOT NULL default 0,
 			  `created_on` int(11) NOT NULL default 0,
 			  `updated_on` int(11) NOT NULL default 0,
-			  `published` INT(1) DEFAULT NULL,
+			  `published` INT(1) DEFAULT 0,
 			  PRIMARY KEY (`id`)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 		");
 		
+		$this->db->query("
+			INSERT INTO `".$this->db->dbprefix('shop_type_delavery')."` (
+			  `id`,
+			  `title`,
+			  `price`,
+			  `published`
+			)
+			VALUES (
+			  1,
+			  'Самовывоз',
+			  0,
+			  1
+			),
+			(
+			  2,
+			  'Доставка по почте',
+			  200,
+			  1
+			);
+		");
+
 		return TRUE;
 	}
 
