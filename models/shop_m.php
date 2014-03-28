@@ -1,6 +1,8 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
 
 class shop_m extends MY_Model {
+
+	public $group_current_id = 0;
 	
 	public $bk_arr = array();
 	

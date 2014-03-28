@@ -10,6 +10,8 @@ class Plugin_shop extends Plugin
 		
 		$data = new stdClass;
 		
+		$data->group_current_id = $this->shop_m->group_current_id;
+		
 		$data->groups = $this->shop_m->group_rec(0, 2);
 		
 		if (!count ($data->groups)) return false;
@@ -17,7 +19,7 @@ class Plugin_shop extends Plugin
 		return $this->load->view('shop/catalog/navi', $data, TRUE);
 	}
 
-	function home_catalog()
+	function home()
 	{
 		$this->load->helper('html');
 		$this->load->model('shop_m');
@@ -40,6 +42,15 @@ class Plugin_shop extends Plugin
 		return $this->load->view('shop/catalog/goods', $data, TRUE);
 	}
 	
+	function head()
+	{
+		return $this->load->view('shop/catalog/head', false, TRUE);
+	}
+	
+	function small_cart()
+	{
+		return $this->load->view('shop/catalog/small_cart', false, TRUE);
+	}
 }
 
 ?>

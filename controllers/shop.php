@@ -22,8 +22,6 @@ class shop extends Public_Controller {
 		$this->template->title(lang('shop.h1'));
 		
 		$this->template->set_breadcrumb(lang('shop.h1'), 'shop', false);
-		
-		$this->data->group_current = 0;
 	}
 	
 	public function show_blank($id = null)
@@ -32,13 +30,11 @@ class shop extends Public_Controller {
 		$post = $this->shop_admin_m->get_order($id);
 		if (!$post) show_404();
 		$this->data->blank = $post->blank;
-		echo $this->load->view('shop/show_blank', $this->data, TRUE);
+		echo $this->load->view('shop/checkout/show_blank', $this->data, TRUE);
 	}
 	
 	function index()
 	{
-		$this->data->group_current = false;
-	
 		$pagination = create_pagination('shop/goods/0', $this->shop_m->count_items());
 		$this->data->items = $this->shop_m->set_prices( $this->shop_m->get_items($pagination) );
 		
@@ -49,12 +45,17 @@ class shop extends Public_Controller {
 	{
 		$this->data->group_current = $this->pyrocache->model('shop_m', 'get_group', array($id));
 		
+		if ($id and !$this->data->group_current) show_404();
+		
+		$this->data->groups = $this->pyrocache->model('shop_m', 'get_groups', array($id));
+		
 		if ($this->data->group_current)
 		{
-			// хлебные крошки вложений
-			$bk = $this->shop_m->bk($this->data->group_current->id);
+			$bk = $this->shop_m->bk($id);
 			foreach($bk as $bk_group) $this->template->set_breadcrumb($bk_group->title, 'shop/goods/'.$bk_group->id, false);
 		}
+		
+		$this->shop_m->group_current_id = $id;
 		
 		$pagination = create_pagination('shop/goods/'.$id, $this->pyrocache->model('shop_m', 'count_items', array($id)));
 		
@@ -77,7 +78,6 @@ class shop extends Public_Controller {
 		
 		$this->data->group_current = $this->shop_m->get_group($this->data->item->gi_group_id);
 		
-		// хлебные крошки вложений
 		$bk = $this->shop_m->bk($this->data->item->gi_group_id);
 		foreach($bk as $bk_group) $this->template->set_breadcrumb($bk_group->title, 'shop/goods/'.$bk_group->id, false);
 		
@@ -90,6 +90,7 @@ class shop extends Public_Controller {
 	
 	function search()
 	{
+		// для autocomplete
 		if ( isset($_GET['q']) )
 		{
 			$this->data->items = $this->shop_m->get_search_list($_GET['q']);
@@ -106,7 +107,7 @@ class shop extends Public_Controller {
 			
 			$this->data->items = $this->shop_m->set_prices( $this->shop_m->get_search_items($this->data->search) );
 			
-			$this->template->build('shop/search', $this->data);
+			$this->template->build('shop/catalog/search', $this->data);
 		}
 	}
 	
@@ -231,7 +232,7 @@ class shop extends Public_Controller {
 		$this->template->build('shop/checkout/finish', $this->data);
 	}
 	
-	/* payment forms */
+	/* формы оплаты */
 	
 	function blank()
 	{	
@@ -316,6 +317,6 @@ class shop extends Public_Controller {
 		$this->template->build('shop/checkout/finish', $this->data);
 	}
 	
-	/* / payment forms */
+	/* / формы оплаты */
 	
 }

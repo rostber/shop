@@ -1,4 +1,4 @@
-<div class="shop_detail">
+<div class="shop-detail">
 
 	<h1><?=$item->title?></h1>
 
@@ -10,22 +10,27 @@
 	
 	<div class="shop-detail__info">
 	
-		<span class="js_add_cart" data-id="<?=$item->id?>" data-price="<?=$item->price?>" data-title="<?=$item->title?>" data-num="1" data-code="<?=$item->code?>">Добавить в корзину</span>
+		<span class="js-cart__add js-cart__add-<?=$item->id?>" data-id="<?=$item->id?>" data-price="<?=$item->price?>" data-title="<?=$item->title?>" data-num="1" data-code="<?=$item->code?>">Добавить в корзину</span>
 		
 		<p class="shop-detail__item">
-			<b>Артикул:</b><br /><?=$item->code?>
+			<b>Артикул:</b>
+			<?=$item->code?>
 		</p>
 		<p class="shop-detail__item">
-			<b>Статус:</b><br /><?=($item->availability) ? 'В наличии' : 'Под заказ' ?>
+			<b>Статус:</b>
+			<?=($item->availability) ? 'В наличии' : 'Под заказ' ?>
 		</p>
 		<p class="shop-detail__item">
-			<b>Модель:</b><br /><?=$item->model?>
+			<b>Модель:</b>
+			<?=$item->model?>
 		</p>
 		<p class="shop-detail__item">
-			<b>Производитель:</b><br /><?=$item->manufacturer?>
+			<b>Производитель:</b>
+			<?=$item->manufacturer?>
 		</p>
 		<p class="shop-detail__item">
-			<b>Страна:</b><br /><?=$item->country?>
+			<b>Страна:</b>
+			<?=$item->country?>
 		</p>
 		<?php if (!empty ($item->depth)): ?>
 			<p class="shop-detail__item">
