@@ -27,8 +27,8 @@ class Plugin_shop extends Plugin
 		
 		$data = new stdClass;
 		
-		$data->upload_dir = site_url().UPLOAD_PATH.$this->config->item('shop.upload_dir');
-		$data->upload_groups_dir = site_url().UPLOAD_PATH.$this->config->item('shop.upload_groups_dir');
+		$data->upload_dir = BASE_URL.UPLOAD_PATH.$this->config->item('shop.upload_dir');
+		$data->upload_groups_dir = BASE_URL.UPLOAD_PATH.$this->config->item('shop.upload_groups_dir');
 		
 		$data->group_current = false;
 		

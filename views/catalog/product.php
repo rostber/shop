@@ -4,7 +4,7 @@
 
 	<div class="shop-detail__image">
 		<?php foreach ($item->photos as $k=>$v): ?>
-			<?=anchor($upload_dir.$v->id.'/'.$v->file, '<img src="'.$upload_dir.$v->id.'/small'.$v->file.'" class="preview">', array('title'=>$item->title, 'rel'=>'photos'))?>
+			<?=anchor($upload_dir.$v->id.'/'.$v->file, '<img src="'.$upload_dir.$v->id.'/small'.$v->file.'" class="preview">', array('title'=>$item->title, 'rel'=>'photos', 'target'=>'_blank'))?>
 		<?php endforeach; ?>
 	</div>
 	
@@ -35,7 +35,7 @@
 		<?php if (!empty ($item->depth)): ?>
 			<p class="shop-detail__item">
 				<b>Габариты:</b>
-				<?=(1*$item->depth_packaging)?>/<?=(1*$item->width_packaging)?>/<?=(1*$item->height_packaging)?>&nbsp;см
+				<?=(1*$item->depth)?> x <?=(1*$item->width)?> x <?=(1*$item->height)?>&nbsp;см
 			</p>
 		<?php endif; ?>
 

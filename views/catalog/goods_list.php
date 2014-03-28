@@ -23,7 +23,6 @@
 						<div class="goods-table__info">Производитель: <?=$item->manufacturer?></div>
 						<div class="goods-table__info">Код: <?=$item->code?></div>
 						<div class="goods-table__info">Страна: <?=$item->country?></div>
-						<div class="goods-table__info"><?=$item->text?></div>
 						<div class="goods-table__info"><?=anchor('shop/product/'.$item->id, 'Полное описание', array('class'=>'button'))?></div>
 					</td>
 					<td>

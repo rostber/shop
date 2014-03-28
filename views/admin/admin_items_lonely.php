@@ -42,7 +42,7 @@
 					<td><?=$item->code?></td>
 					<td><span class="file"><?=$item->title?></span></td>
 					<td><?php echo format_date($item->updated_on); ?></td>
-					<td>
+					<td style="text-align:right;">
 						<?=anchor('admin/shop/create_group_item?item_id='.$item->id, '<span>Добавить в таксон</span>', array('class'=>'btn gray'))?>
 						<?=anchor('admin/shop/published/'.$item->id, '&nbsp;', array('class'=>(($item->published) ? 'check' : 'not_check')))?>
 						<?=anchor('admin/shop/manage_item/' 			. $item->id, '&nbsp;', array('class'=>'edit'))?>

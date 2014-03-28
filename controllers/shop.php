@@ -16,8 +16,8 @@ class shop extends Public_Controller {
 		
 		$this->data = new stdClass;
 		
-		$this->data->upload_dir = site_url().UPLOAD_PATH.$this->config->item('shop.upload_dir');
-		$this->data->upload_groups_dir = site_url().UPLOAD_PATH.$this->config->item('shop.upload_groups_dir');
+		$this->data->upload_dir = BASE_URL.UPLOAD_PATH.$this->config->item('shop.upload_dir');
+		$this->data->upload_groups_dir = BASE_URL.UPLOAD_PATH.$this->config->item('shop.upload_groups_dir');
 		
 		$this->template->title(lang('shop.h1'));
 		
