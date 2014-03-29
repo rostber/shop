@@ -39,20 +39,16 @@
 					<label for="show_home"><?php echo lang('shop.show_home_label'); ?></label>
 					<?php echo form_checkbox('show_home', true, $post->show_home) ?>
 				</li>
+
+				<?php foreach($rows_trim as $v=>$required): ?>
 				
-					
-				
-				<?php
-				foreach($rows_trim as $v=>$required):
-				?>
-				
-				<li class="<?php echo alternator('', 'even'); ?>">
-					<label for="<?=$v?>">
-						<?php echo lang('shop.'.$v.'_label'); ?>
-						<?php if ($required): ?> <span>*</span><?php endif; ?>
-					</label>
-					<div class="input"><?php echo form_input($v, htmlspecialchars_decode($post->$v), 'maxlength="255" id="'.$v.'"'); ?></div>
-				</li>
+					<li class="<?php echo alternator('', 'even'); ?>">
+						<label for="<?=$v?>">
+							<?php echo lang('shop.'.$v.'_label'); ?>
+							<?php if ($required): ?> <span>*</span><?php endif; ?>
+						</label>
+						<div class="input"><?php echo form_input($v, htmlspecialchars_decode($post->$v), 'maxlength="255" id="'.$v.'"'); ?></div>
+					</li>
 				
 				<?php endforeach; ?>
 				
@@ -73,19 +69,19 @@
 			
 				<ul id="file_list">
 				
-<?php foreach($gallery as $gallery_item): ?>
+					<?php foreach($gallery as $gallery_item): ?>
 
-					<li>
-						<label><?php echo lang('shop.file'); ?></label>
-						<div class="input">						
-							<input type="hidden" name="file_id[<?=$gallery_item->id?>]" value="<?=$gallery_item->id?>" />
-							<input type="file" name="file[<?=$gallery_item->id?>]" />
-							<?='<a href="'.$upload_dir.$gallery_item->id.'/'.$gallery_item->file.'" target="_blank" class="modal"><img src="/addons/shared_addons/modules/shop/views/admin/img/image_preview.gif" alt="preview" /></a>'?>
-							<span class="del_file"><img src="/addons/shared_addons/modules/shop/views/admin/img/image_delete.gif" alt="preview" /></span>
-						</div>
-					</li>
+						<li>
+							<label><?php echo lang('shop.file'); ?></label>
+							<div class="input">						
+								<input type="hidden" name="file_id[<?=$gallery_item->id?>]" value="<?=$gallery_item->id?>" />
+								<input type="file" name="file[<?=$gallery_item->id?>]" />
+								<?='<a href="'.BASE_URI.$upload_dir.$gallery_item->id.'/'.$gallery_item->file.'" target="_blank" class="modal"><img src="/addons/shared_addons/modules/shop/views/admin/img/image_preview.gif" alt="preview" /></a>'?>
+								<span class="del_file"><img src="/addons/shared_addons/modules/shop/views/admin/img/image_delete.gif" alt="preview" /></span>
+							</div>
+						</li>
 
-<?php endforeach; ?>
+					<?php endforeach; ?>
 
 				</ul>
 				

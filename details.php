@@ -15,9 +15,11 @@ class Module_shop extends Module {
 				'en' => 'Web shop',
 				'ru' => 'Интернет магазин'
 			),
-			'frontend' => TRUE,
-			'backend' => TRUE,
+			'frontend' => true,
+			'backend' => true,
+			'skip_xss' => true,
 			'menu' => 'content',
+			
 			'sections' => array(
 			    'posts' => array(
 				    'name' => 'shop.list_label',

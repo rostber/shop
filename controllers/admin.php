@@ -90,9 +90,9 @@ class Admin extends Admin_Controller {
 		
 		$this->data = new stdClass;
 		
-		$this->data->upload_dir = BASE_URI.UPLOAD_PATH.$this->config->item('shop.upload_dir');
-		$this->data->upload_groups_dir = BASE_URI.UPLOAD_PATH.$this->config->item('shop.upload_groups_dir');
-		$this->data->import_temp_dir = BASE_URI.UPLOAD_PATH.$this->config->item('shop.import_temp_dir');
+		$this->data->upload_dir = UPLOAD_PATH.$this->config->item('shop.upload_dir');
+		$this->data->upload_groups_dir = UPLOAD_PATH.$this->config->item('shop.upload_groups_dir');
+		$this->data->import_temp_dir = UPLOAD_PATH.$this->config->item('shop.import_temp_dir');
 		
 		check_dir($this->data->upload_dir);
 		check_dir($this->data->upload_groups_dir);

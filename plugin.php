@@ -16,7 +16,7 @@ class Plugin_shop extends Plugin
 		
 		if (!count ($data->groups)) return false;
 		
-		return $this->load->view('shop/catalog/navi', $data, TRUE);
+		return $this->module_view('shop', 'catalog/navi', $data);
 	}
 
 	function home()
@@ -39,17 +39,17 @@ class Plugin_shop extends Plugin
 		
 		$data->items = $this->shop_m->set_prices( $this->pyrocache->model('shop_m', 'get_items', array($data->pagination)) );
 		
-		return $this->load->view('shop/catalog/goods', $data, TRUE);
+		return $this->module_view('shop', 'catalog/goods', $data);
 	}
 	
 	function head()
 	{
-		return $this->load->view('shop/catalog/head', false, TRUE);
+		return $this->module_view('shop', 'catalog/head', false);
 	}
 	
 	function small_cart()
 	{
-		return $this->load->view('shop/catalog/small_cart', false, TRUE);
+		return $this->module_view('shop', 'catalog/small_cart', false);
 	}
 }
 
