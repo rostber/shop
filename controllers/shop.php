@@ -21,7 +21,7 @@ class shop extends Public_Controller {
 		
 		$this->template->title(lang('shop.h1'));
 		
-		$this->template->set_breadcrumb(lang('shop.h1'), 'shop', false);
+		$this->template->set_breadcrumb(lang('shop.h1'), 'shop');
 	}
 	
 	public function show_blank($id = null)
@@ -35,8 +35,8 @@ class shop extends Public_Controller {
 	
 	function index()
 	{
-		$pagination = create_pagination('shop/goods/0', $this->shop_m->count_items());
-		$this->data->items = $this->shop_m->set_prices( $this->shop_m->get_items($pagination) );
+		$pagination = create_pagination('shop/goods/0', $this->pyrocache->model('shop_m', 'count_items'));
+		$this->data->items = $this->shop_m->set_prices( $this->pyrocache->model('shop_m', 'get_items', array($pagination)) );
 		
 		$this->template->set('pagination', $pagination)->build('catalog/goods', $this->data);
 	}
@@ -49,10 +49,10 @@ class shop extends Public_Controller {
 		
 		$this->data->groups = $this->pyrocache->model('shop_m', 'get_groups', array($id));
 		
-		if ($this->data->group_current)
+		$bk = $this->shop_m->bk($id);
+		foreach($bk as $k=>$bk_group) 
 		{
-			$bk = $this->shop_m->bk($id);
-			foreach($bk as $bk_group) $this->template->set_breadcrumb($bk_group->title, 'shop/goods/'.$bk_group->id, false);
+			$this->template->set_breadcrumb($bk_group->title, (isset($bk[$k+1]) ? 'shop/goods/'.$bk_group->id : false));
 		}
 		
 		$this->shop_m->group_current_id = $id;
@@ -79,9 +79,9 @@ class shop extends Public_Controller {
 		$this->data->group_current = $this->shop_m->get_group($this->data->item->gi_group_id);
 		
 		$bk = $this->shop_m->bk($this->data->item->gi_group_id);
-		foreach($bk as $bk_group) $this->template->set_breadcrumb($bk_group->title, 'shop/goods/'.$bk_group->id, false);
+		foreach($bk as $bk_group) $this->template->set_breadcrumb($bk_group->title, 'shop/goods/'.$bk_group->id);
 		
-		$this->template->set_breadcrumb($this->data->item->title, 'shop/product/'.$id, false);
+		$this->template->set_breadcrumb($this->data->item->title, 'shop/product/'.$id);
 		
 		$this->data->items = $this->shop_m->get_items($this->data->item->gi_group_id);
 		
@@ -100,7 +100,7 @@ class shop extends Public_Controller {
 		}
 		else
 		{		
-			$this->template->set_breadcrumb(lang('shop.search'), 'shop/search/', false);
+			$this->template->set_breadcrumb(lang('shop.search'), 'shop/search/');
 			
 			if (!empty ($_GET['search'])) $this->data->search = $_GET['search'];
 			else $this->data->search = false;
@@ -118,7 +118,7 @@ class shop extends Public_Controller {
 		if (!empty ($_COOKIE['cart'])) $this->data->items = $this->shop_m->set_prices( $this->shop_cart_m->get_cart_items($_COOKIE['cart']) );
 		else $this->data->items = array();
 		
-		$this->template->set_breadcrumb(lang('shop.cart'), 'shop/cart/', false);
+		$this->template->set_breadcrumb(lang('shop.cart'), 'shop/cart/');
 		
 		$this->template->build('shop/checkout/cart', $this->data);
 	}
@@ -163,8 +163,8 @@ class shop extends Public_Controller {
 			}
 		}
 		
-		$this->template->set_breadcrumb(lang('shop.cart'), 'shop/cart/', false);
-		$this->template->set_breadcrumb(lang('shop.checkout'), 'shop/checkout/', false);
+		$this->template->set_breadcrumb(lang('shop.cart'), 'shop/cart/');
+		$this->template->set_breadcrumb(lang('shop.checkout'), 'shop/checkout/');
 		
 		$this->template->build('shop/checkout/checkout', $this->data);
 	}
@@ -177,7 +177,7 @@ class shop extends Public_Controller {
 			$this->data->total = $this->data->total + $v->price*$v->num;
 		}
 	
-		$this->template->set_breadcrumb(lang('shop.finish'), 'shop/finish/', false);
+		$this->template->set_breadcrumb(lang('shop.finish'), 'shop/finish/');
 		
 		$type_payment = $_COOKIE['type_payment'];
 		$type_delavery = $_COOKIE['type_delavery'];
@@ -240,8 +240,8 @@ class shop extends Public_Controller {
 	{	
 		if (empty($_REQUEST['blank']))
 		{
-			$this->template->set_breadcrumb(lang('shop.cart'), 'shop/cart/', false);
-			$this->template->set_breadcrumb(lang('shop.checkout'), 'shop/checkout/', false);
+			$this->template->set_breadcrumb(lang('shop.cart'), 'shop/cart/');
+			$this->template->set_breadcrumb(lang('shop.checkout'), 'shop/checkout/');
 		
 			$this->template->build('shop/checkout/pay_form', $this->data);
 		}

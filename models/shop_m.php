@@ -14,7 +14,7 @@ class shop_m extends MY_Model {
 	
 	function bk_rec($group_id)
 	{
-		if (!$group_id) 
+		if ($group_id) 
 		{
 			$ret = $this->get_group($group_id);
 			$this->bk_arr[] = $ret;

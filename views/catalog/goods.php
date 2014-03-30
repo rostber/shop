@@ -14,8 +14,12 @@
 	
 	</div>
 
+<?php else: ?>
+
+	<h1><?=lang('shop.h1')?></h1>
+
 <?php endif; ?>
 
-<?php $this->load->view('shop/catalog/taxons_list', array('groups' => $groups, 'upload_group_dir' => $upload_dir)); ?>
+<?php if (!empty($groups)) $this->load->view('shop/catalog/taxons_list', array('groups' => $groups, 'upload_group_dir' => $upload_dir)); ?>
 
-<?php $this->load->view('shop/catalog/goods_list', array('items' => $items, 'upload_dir' => $upload_dir)); ?>
+<?php if (!empty($items)) $this->load->view('shop/catalog/goods_list', array('items' => $items, 'upload_dir' => $upload_dir)); ?>

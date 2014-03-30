@@ -7,6 +7,7 @@
 				<th colspan="2">Модель</th>
 				<th>Наличие</th>
 				<th>Цена</th>
+				<th></th>
 			</tr>
 
 			<?php foreach ($items as $k=>$item): ?>
@@ -18,12 +19,11 @@
 						<?php endif; ?>
 					</td>
 					<td width="50%">
-						<div class="goods-table__info"><?=$item->title?></div>
+						<h3 class="goods-table__title"><?=anchor('shop/product/'.$item->id, $item->title)?></h3>
 						<div class="goods-table__info">Модель: <?=$item->model?></div>
 						<div class="goods-table__info">Производитель: <?=$item->manufacturer?></div>
 						<div class="goods-table__info">Код: <?=$item->code?></div>
 						<div class="goods-table__info">Страна: <?=$item->country?></div>
-						<div class="goods-table__info"><?=anchor('shop/product/'.$item->id, 'Полное описание', array('class'=>'button'))?></div>
 					</td>
 					<td>
 						<?php if (!empty ($item->depth)): ?>
