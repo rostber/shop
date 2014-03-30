@@ -4,9 +4,9 @@
 
 // фотографии продуктов
 $config['shop.gallery_sizes'] = array(
-		''=>array(480, 480, false, false),
-		'middle'=>array(240, 240, true, false),
-		'small'=>array(160, 220, false, false)
+		''=>array(1000, 1000, false, false),
+		'middle'=>array(450, 600, false, false),
+		'small'=>array(180, 240, false, false)
 	);
 
 // фотографии таксонов

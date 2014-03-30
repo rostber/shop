@@ -1,8 +1,7 @@
 <?php
 
 class shop extends Public_Controller {
-	
-	
+
 	public function __construct()
 	{
 		parent::__construct();
@@ -10,15 +9,16 @@ class shop extends Public_Controller {
 		$this->load->model('shop_cart_m');
 		$this->lang->load('shop');
 		$this->load->helper('html');
-		$this->config->load('settings');
+		$this->load->helper('text');
 		$this->load->helper('edit_files');
+		$this->config->load('settings');
 		$this->load->library('email');
 		
 		$this->data = new stdClass;
 		
 		$this->data->upload_dir = BASE_URL.UPLOAD_PATH.$this->config->item('shop.upload_dir');
 		$this->data->upload_groups_dir = BASE_URL.UPLOAD_PATH.$this->config->item('shop.upload_groups_dir');
-		
+
 		$this->template->title(lang('shop.h1'));
 		
 		$this->template->set_breadcrumb(lang('shop.h1'), 'shop');
@@ -63,9 +63,7 @@ class shop extends Public_Controller {
 		
 		$this->template->set('pagination', $pagination)->build('catalog/goods', $this->data);
 	}
-	
 
-	
 	function product($id = 0)
 	{
 		$this->data->item = $this->shop_m->get_item($id);
@@ -78,10 +76,12 @@ class shop extends Public_Controller {
 		
 		$this->data->group_current = $this->shop_m->get_group($this->data->item->gi_group_id);
 		
+		$this->shop_m->group_current_id = $this->data->group_current->id;
+		
 		$bk = $this->shop_m->bk($this->data->item->gi_group_id);
 		foreach($bk as $bk_group) $this->template->set_breadcrumb($bk_group->title, 'shop/goods/'.$bk_group->id);
 		
-		$this->template->set_breadcrumb($this->data->item->title, 'shop/product/'.$id);
+		$this->template->set_breadcrumb($this->data->item->title, false);
 		
 		$this->data->items = $this->shop_m->get_items($this->data->item->gi_group_id);
 		
