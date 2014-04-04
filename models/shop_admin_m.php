@@ -171,7 +171,7 @@ class shop_admin_m extends MY_Model {
 		}
 		
 		// boolean
-		$rows = array('show_home', 'availability');		
+		$rows = array('show_home');		
 		foreach ($rows as $v)
 		{
 			if (!empty($post[$v])) $res['`'.$v.'`'] = $post[$v];
@@ -236,6 +236,16 @@ class shop_admin_m extends MY_Model {
 		}
 	}
 	
+	public function get_order_item($id)
+	{
+    	$result = $this->db
+			->select('*')
+			->from('shop_order_items')
+			->where('id', $id)
+			->limit(1)
+			->get()->result();
+		return (count($result) > 0) ? $result[0] : $result;
+	}
 	
 	public function update_order($id, $post)
 	{
@@ -245,12 +255,25 @@ class shop_admin_m extends MY_Model {
 		{
 			foreach ($post['item_id'] as $k=>$v)
 			{
+				// обновление кол-во товара на складе
+				$res_order_item = $this->get_order_item($v);
+				$this->update_item_balance($res_order_item->item_id, $res_order_item->num - $post['item_num'][$k]);
+				
 				$this->db
 					->where('id', $v)
 					->update('shop_order_items', array('num'=>1*$post['item_num'][$k]));
 				$this->pyrocache->delete_all('shop_m');
 				$not_deleted_a[] = $v;
 			}
+		}
+		
+		// обновление кол-во товара на складе
+		if (count($not_deleted_a)) $this->db->where_not_in('id', $not_deleted_a);
+		$res_order_items = $this->db->where('order_id', $id)->from('shop_order_items')->get()->result();
+		foreach ($res_order_items as $v)
+		{
+			$res_order_item = $this->get_order_item($v->id);
+			if ($res_order_item) $this->update_item_balance($v->item_id, $res_order_item->num);
 		}
 		
 		if (count($not_deleted_a)) $this->db->where_not_in('id', $not_deleted_a);
@@ -265,18 +288,32 @@ class shop_admin_m extends MY_Model {
 				{
 					$this->db->insert('shop_order_items', 
 						array(
-							'item_id'=>$id,
-							'order_id'=>$v,
+							'item_id'=>$v,
+							'order_id'=>$id,
 							'title'=>$res->title,
 							'code'=>$res->code,
 							'price'=>$res->price,
 							'num'=>$post['item_new_num'][$k]
 						)
 					);
+
+					// обновление кол-во товара на складе
+					$this->update_item_balance($v, -$post['item_new_num'][$k]);
 				}
 			}
 		}
 		return true;
+	}
+	
+	function update_item_balance($item_id, $add_balance)
+	{
+		$res = $this->get($item_id);
+		if ($res)
+		{
+			$balance = $res->balance + $add_balance;
+			if ($balance > 0) return $this->db->where('id', $item_id)->update('shop_items', array('balance'=>$balance));
+		}
+		return false;
 	}
 	
 	function copy_files($item_id)

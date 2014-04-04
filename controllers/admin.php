@@ -189,7 +189,6 @@ class Admin extends Admin_Controller {
 							$title = $data->val($row,'C');
 							$model = $data->val($row,'D');
 							$text = $data->val($row,'E');
-							$availability = $data->val($row,'F');
 							$power = $data->val($row,'G');
 							$voltage = $data->val($row,'H');
 							$depth = $data->val($row,'I');
@@ -205,7 +204,7 @@ class Admin extends Admin_Controller {
 							$image_url = $data->val($row,'U');
 							$country = $data->val($row,'V');
 
-							$res[$res_key][] = array($code_1c, $manufacturer, $title, $model, $text, $availability, $power,  $voltage, $depth, $width, $height, $depth_packaging, $width_packaging, $height_packaging, $price, $site, $weight, $gross_weight, $image_url, $country);
+							$res[$res_key][] = array($code_1c, $manufacturer, $title, $model, $text, $power,  $voltage, $depth, $width, $height, $depth_packaging, $width_packaging, $height_packaging, $price, $site, $weight, $gross_weight, $image_url, $country);
 							
 							if ($row / $this->config->item('shop.import_step_items') > ($res_key + 1)) $res_key++; // количество шагов при импорте
 							
@@ -245,9 +244,9 @@ class Admin extends Admin_Controller {
 					$res = unserialize($res);
 					foreach ($res as $res_i)
 					{
-						list($code_1c, $manufacturer, $title, $model, $text, $availability, $power,  $voltage, $depth, $width, $height, $depth_packaging, $width_packaging, $height_packaging, $price, $site, $weight, $gross_weight, $image_url, $country) = $res_i;
+						list($code_1c, $manufacturer, $title, $model, $text, $power,  $voltage, $depth, $width, $height, $depth_packaging, $width_packaging, $height_packaging, $price, $site, $weight, $gross_weight, $image_url, $country) = $res_i;
 					
-						$this->shop_admin_m->insert_item_and_gallery($code_1c, $manufacturer, $title, $model, $text, $availability, $power,  $voltage, $depth, $width, $height, $depth_packaging, $width_packaging, $height_packaging, $price, $site, $weight, $gross_weight, $image_url, $country);
+						$this->shop_admin_m->insert_item_and_gallery($code_1c, $manufacturer, $title, $model, $text, $power,  $voltage, $depth, $width, $height, $depth_packaging, $width_packaging, $height_packaging, $price, $site, $weight, $gross_weight, $image_url, $country);
 					}
 					$this->session->set_flashdata('success', lang('shop.import_step_finish').count($res));
 					redirect('admin/shop/import/'.($step+1));

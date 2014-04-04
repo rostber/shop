@@ -1,8 +1,8 @@
 <h1>Оформление заказа</h1>
 
-<p>Для завершения покупки, выберите способ оплаты.</p>
+<p>Для завершения покупки, выберите способ оплаты и доставки.</p>
 
-<form action="" method="post">
+<form action="" method="post" class="form">
 	<input type="hidden" name="checkout" value="1" />
 	<fieldset>
 		<legend>Способ оплаты:</legend>
@@ -15,7 +15,6 @@
 		<?php endforeach; ?>
 		</ol>
 	</fieldset>
-	<hr />
 	<fieldset>
 		<legend>Способ доставки:</legend>
 		<ol>

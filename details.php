@@ -98,8 +98,6 @@ class Module_shop extends Module {
 			  `delivery` varchar(255) NULL default NULL,
 			  `main_1c_id` varchar(64) NULL default NULL,
 			  `measurement` varchar(32) NULL default NULL,
-			  
-			  `availability` int(11) NOT NULL default 0,
 			  `depth` varchar(128) NULL default NULL,
 			  `width` varchar(128) NULL default NULL,
 			  `height` varchar(128) NULL default NULL,
@@ -197,7 +195,7 @@ class Module_shop extends Module {
 			VALUES (
 			  1,
 			  'Наличными',
-			  'finish',
+			  NULL,
 			  1
 			),
 			(

@@ -20,6 +20,6 @@
 
 <?php endif; ?>
 
-<?php if (!empty($groups)) $this->load->view('shop/catalog/taxons_list', array('groups' => $groups, 'upload_group_dir' => $upload_dir)); ?>
+<?php include('taxons_list'); ?>
 
-<?php if (!empty($items)) $this->load->view('shop/catalog/goods_list', array('items' => $items, 'upload_dir' => $upload_dir)); ?>
+<?php include('goods_list'); ?>

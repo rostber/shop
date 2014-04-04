@@ -36,6 +36,7 @@ class shop_cart_m extends MY_Model {
 					'code'=>$v->code,
 					'price'=>$v->price
 				);
+				$this->db->where('id', $v->id)->update('shop_items', array('balance'=>($v->balance - $v->num)));
 				$this->db->insert('shop_order_items', $res);
 			}
 			return $order_id;
@@ -63,9 +64,10 @@ class shop_cart_m extends MY_Model {
 		return $this->db->get()->result();
 	}
 
-	public function get_cart_items($cart = array())
+	public function get_cart_items()
 	{
-		$cart = json_decode($cart);
+		if (!empty($_COOKIE['cart'])) $cart = json_decode( $_COOKIE['cart'] );
+		else $cart = array();
 		if ( !count($cart) ) return array();
 		$id_array = array();
 		foreach($cart as $v) $id_array[] = $v[0];

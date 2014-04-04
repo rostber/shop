@@ -85,7 +85,7 @@ class shop extends Public_Controller {
 		
 		$this->data->items = $this->shop_m->get_items($this->data->item->gi_group_id);
 		
-		$this->template->build('shop/catalog/product', $this->data);
+		$this->template->build('catalog/product', $this->data);
 	}
 	
 	function search()
@@ -102,12 +102,12 @@ class shop extends Public_Controller {
 		{		
 			$this->template->set_breadcrumb(lang('shop.search'), 'shop/search/');
 			
-			if (!empty ($_GET['search'])) $this->data->search = $_GET['search'];
+			if (!empty ($_REQUEST['search'])) $this->data->search = $_REQUEST['search'];
 			else $this->data->search = false;
 			
 			$this->data->items = $this->shop_m->set_prices( $this->shop_m->get_search_items($this->data->search) );
 			
-			$this->template->build('shop/catalog/search', $this->data);
+			$this->template->build('catalog/search', $this->data);
 		}
 	}
 	
@@ -115,36 +115,21 @@ class shop extends Public_Controller {
 	
 	function cart()
 	{
-		if (!empty ($_COOKIE['cart'])) $this->data->items = $this->shop_m->set_prices( $this->shop_cart_m->get_cart_items($_COOKIE['cart']) );
-		else $this->data->items = array();
+		$this->data->items = $this->shop_m->set_prices( $this->shop_cart_m->get_cart_items() );
 		
 		$this->template->set_breadcrumb(lang('shop.cart'), 'shop/cart/');
 		
-		$this->template->build('shop/checkout/cart', $this->data);
+		$this->template->build('checkout/cart', $this->data);
 	}
 	
 	function checkout()
 	{
-		if (!empty ($_COOKIE['cart'])) $this->data->items = $this->shop_cart_m->get_cart_items($_COOKIE['cart']);
-		else $this->data->items = array();
+		$this->data->items = $this->shop_cart_m->get_cart_items();
 		
 		if ( !count($this->data->items) ) redirect('shop/cart');
 		
 		$this->data->type_payment = $this->shop_cart_m->get_type_payments();
 		$this->data->type_delavery = $this->shop_cart_m->get_type_delavery();
-		
-		$fields = array(
-			'name', 'address', 'email', 'phone', 'text'
-		);
-		foreach($fields as $v)
-		{
-			if (isset($_POST[$v])) 
-			{
-				$this->data->$v = $_POST[$v];
-				setcookie($v, $_POST[$v], time()+3600, '/');
-			}
-			else show_404();
-		}
 		
 		// переходим к способу оплаты
 		if (isset($_REQUEST['checkout']) and isset($_REQUEST['type_payment']) and isset($_REQUEST['type_delavery'])) 
@@ -156,28 +141,50 @@ class shop extends Public_Controller {
 			{
 				if ($payment->id == $_REQUEST['type_payment'])
 				{
-					if (!empty ($payment->redirect)) redirect($payment->redirect);
-					else redirect('shop/finish');
-					break;
+					if (!empty ($payment->redirect)) redirect('shop/'.$payment->redirect);
+					else 
+					{
+						$id = $this->insert_order();
+						redirect('shop/finish');
+					}
 				}
+			}
+		}		
+		else
+		{
+			$fields = array(
+				'name', 'address', 'email', 'phone', 'text'
+			);
+			foreach($fields as $v)
+			{
+				if (isset($_POST[$v])) 
+				{
+					$this->data->$v = $_POST[$v];
+					setcookie($v, $_POST[$v], time()+3600, '/');
+				}
+				else show_404();
 			}
 		}
 		
 		$this->template->set_breadcrumb(lang('shop.cart'), 'shop/cart/');
 		$this->template->set_breadcrumb(lang('shop.checkout'), 'shop/checkout/');
 		
-		$this->template->build('shop/checkout/checkout', $this->data);
+		$this->template->build('checkout/checkout', $this->data);
 	}
 	
-	private function insert_order( $items = array() )
+	private function insert_order()
 	{
+		$this->data->items = $this->shop_cart_m->get_cart_items();
+	
 		$this->data->total = 0;
 		foreach ($this->data->items as $k=>$v)
 		{
 			$this->data->total = $this->data->total + $v->price*$v->num;
 		}
 	
-		$this->template->set_breadcrumb(lang('shop.finish'), 'shop/finish/');
+		$this->template->set_breadcrumb(lang('shop.finish'), false);
+		
+		if (empty($_COOKIE['type_payment']) or empty($_COOKIE['type_delavery'])) show_404();
 		
 		$type_payment = $_COOKIE['type_payment'];
 		$type_delavery = $_COOKIE['type_delavery'];
@@ -188,13 +195,13 @@ class shop extends Public_Controller {
 		$address = $this->data->address = !empty($_COOKIE['address']) ? $_COOKIE['address'] : null;
 		$text = $this->data->text = !empty($_COOKIE['text']) ? $_COOKIE['text'] : null;
 		
-		$order_id = $this->data->order_id = $this->shop_cart_m->insert_order($type_payment, $type_delavery, $items, $name, $email, $phone, $address, $text);
+		$order_id = $this->data->order_id = $this->shop_cart_m->insert_order($type_payment, $type_delavery, $this->data->items, $name, $email, $phone, $address, $text);
 
 		$this->email->from( $this->settings_m->get('server_email')->value, $this->settings_m->get('site_name')->value );
 		$this->email->to( $this->settings_m->get('contact_email')->value );
 		$this->email->subject( lang('shop.mail_cart_subject') );
 		$this->data->admin = true;
-		$mess = $this->load->view('shop/checkout/mail', $this->data, TRUE);
+		$mess = $this->load->view('checkout/mail', $this->data, TRUE);
 		$this->email->message( $mess );
 		$this->email->send();
 		
@@ -204,7 +211,7 @@ class shop extends Public_Controller {
 			$this->email->to( $email );
 			$this->email->subject( lang('shop.mail_cart_subject') );
 			$this->data->admin = false;
-			$mess = $this->load->view('shop/checkout/mail', $this->data, TRUE);
+			$mess = $this->load->view('checkout/mail', $this->data, TRUE);
 			$this->email->message( $mess );
 
 			$this->email->send();
@@ -227,11 +234,9 @@ class shop extends Public_Controller {
 	
 	function finish()
 	{		
-		$this->insert_order();
-		
 		$this->data->blank = false;
 		
-		$this->template->build('shop/checkout/finish', $this->data);
+		$this->template->build('checkout/finish', $this->data);
 	}
 	
 	/* формы оплаты */
@@ -243,7 +248,7 @@ class shop extends Public_Controller {
 			$this->template->set_breadcrumb(lang('shop.cart'), 'shop/cart/');
 			$this->template->set_breadcrumb(lang('shop.checkout'), 'shop/checkout/');
 		
-			$this->template->build('shop/checkout/pay_form', $this->data);
+			$this->template->build('checkout/blank_form', $this->data);
 		}
 		else
 		{
@@ -257,16 +262,15 @@ class shop extends Public_Controller {
 			$this->data->rec_title = $this->config->item('shop.rec_title');
 			$this->data->rec_company = $this->config->item('shop.rec_company');
 			
-			if (!empty ($_COOKIE['cart'])) $this->data->items = $this->shop_m->set_prices( $this->shop_cart_m->get_cart_items($_COOKIE['cart']) );
-			else $this->data->items = array();
+			$this->data->items = $this->shop_m->set_prices( $this->shop_cart_m->get_cart_items() );
 			
-			$this->data->order_id = $this->insert_order( $this->data->items );
+			$this->data->order_id = $this->insert_order();
 			
-			$this->data->blank = $this->load->view('shop/pay_blank', $this->data, TRUE);
+			$this->data->blank = $this->load->view('checkout/blank', $this->data, TRUE);
 			
 			$this->update_order($this->data->blank, $this->data->order_id);
 		
-			$this->template->build('shop/checkout/finish', $this->data);
+			$this->template->build('checkout/finish', $this->data);
 		}
 	}
 	

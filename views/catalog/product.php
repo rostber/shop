@@ -17,10 +17,6 @@
 			<?=$item->code?>
 		</p>
 		<p class="shop-detail__item">
-			<b>Статус:</b>
-			<?=($item->availability) ? 'В наличии' : 'Под заказ' ?>
-		</p>
-		<p class="shop-detail__item">
 			<b>Модель:</b>
 			<?=$item->model?>
 		</p>
