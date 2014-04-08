@@ -4,14 +4,8 @@
 	<ol>
 		<?php
 		$fields = array(
-			'inn'=>'ИНН',
-			'kpp'=>'КПП',
-			'platelshik'=>'Плательщик',
-			'bank'=>'Банк получателя',
-			'schot'=>'Счет',
-			'bik'=>'Бик',
-			'kor'=>'Кор. счет',
-			'poluchatel'=>'Грузополучатель',
+			'rec_name'=>'ФИО плательщика',
+			'rec_address'=>'Адрес плательщика'
 		);
 		?>
 		<?php foreach ($fields as $k=>$v): ?>

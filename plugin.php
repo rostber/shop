@@ -19,6 +19,8 @@ class Plugin_shop extends Plugin
 		
 		$data->groups = $this->pyrocache->model('shop_m', 'group_rec', array(0, 2));
 		
+		$data->level = 0;
+		
 		if (!count ($data->groups)) return false;
 		
 		return $this->module_view('shop', 'catalog/navi', $data);
@@ -34,6 +36,8 @@ class Plugin_shop extends Plugin
 		$data->group_current_id = $this->shop_m->group_current_id;
 		
 		$data->groups = $this->pyrocache->model('shop_m', 'group_rec', array(0, 2));
+		
+		$data->level = 0;
 		
 		if (!count ($data->groups)) return false;
 		
@@ -51,8 +55,8 @@ class Plugin_shop extends Plugin
 		
 		$data->upload_dir = BASE_URL.UPLOAD_PATH.$this->config->item('shop.upload_dir');
 		
-		$data->pagination = create_pagination('shop/goods/0', $this->shop_m->count_items());
-		$data->items = $this->shop_m->set_prices( $this->pyrocache->model('shop_m', 'get_items', array($data->pagination)) );
+		$data->pagination = false;
+		$data->items = $this->shop_m->set_prices( $this->pyrocache->model('shop_m', 'get_home', array()) );
 		
 		$data->list = $this->module_view('shop', 'catalog/goods_list', $data);
 		

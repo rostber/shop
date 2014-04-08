@@ -54,6 +54,7 @@ $lang['shop.import_label']					= 'Обновление прайс-листа';
 $lang['shop.import_step_label']				= 'Обновление прайс-листа шаг: №';
 $lang['shop.blank_label']					= 'Показать квитанцию';
 $lang['shop.next_label']					= 'Далее';
+$lang['shop.pay']							= 'Оплата';
 
 $lang['shop.depth_label']					= 'Глубина';
 $lang['shop.width_label']					= 'Ширина';

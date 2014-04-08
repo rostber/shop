@@ -190,7 +190,7 @@ hr { border: 0\9 /* для IE8 */ }
 			</td>
 			<td rowspan="4" width="10"></td>
 			<td>
-			  <font size="1">12312 rostber </font>
+			  <font size="1"><?=$_REQUEST['rec_name']?></font>
 			</td>
 		  </tr>
 		  <tr>
@@ -204,7 +204,7 @@ hr { border: 0\9 /* для IE8 */ }
 			  <font size="2">Адрес плательщика</font>
 			</td>
 			<td>
-			  <font size="1">123123,	Россия, Москва и Московская обл., Абрамцево, 123123123</font>
+			  <font size="1"><?=$_REQUEST['rec_address']?></font>
 			</td>
 		  </tr>
 		  <tr>
@@ -222,7 +222,7 @@ hr { border: 0\9 /* для IE8 */ }
 			  </font>
 			</td>
 			<td width="45">
-			  <font size="2">11675</font>
+			  <font size="2"><?=$summ?></font>
 			</td>
 			<td width="20">
 			  <font size="1"> руб. </font>
@@ -385,7 +385,7 @@ hr { border: 0\9 /* для IE8 */ }
 		  <tbody><tr>
 			<td>
 			  <font size="2">
-				<b>ООО "Инфинити"</b>
+				<b><?=$rec_company?></b>
 			  </font>
 			</td>
 		  </tr>
@@ -403,11 +403,11 @@ hr { border: 0\9 /* для IE8 */ }
 		<table class="default" rules="none" border="0" cellpadding="0" cellspacing="0" width="100%">
 		  <tbody><tr>
 			<td width="150">
-			  <font size="2">1234567897/123456789</font>
+			  <font size="2"><?=$rec_inn?>/<?=$rec_kpp?></font>
 			</td>
 			<td rowspan="3" width="20"></td>
 			<td>
-			  <font size="2">40500000000000001</font>
+			  <font size="2"><?=$rec_num?></font>
 			</td>
 		  </tr>
 		  <tr>
@@ -434,7 +434,7 @@ hr { border: 0\9 /* для IE8 */ }
 			</td>
 			<td width="5"></td>
 			<td width="320">
-			  <font size="2">Сбербанк России ОАО г. Москва</font>
+			  <font size="2"><?=$rec_bank_address?></font>
 			</td>
 			<td rowspan="3" width="10"></td>
 			<td width="20">
@@ -442,7 +442,7 @@ hr { border: 0\9 /* для IE8 */ }
 			</td>
 			<td rowspan="3" width="5"></td>
 			<td>
-			  <font size="2">024040</font>
+			  <font size="2"><?=$rec_bik?></font>
 			</td>
 		  </tr>
 		  <tr>
@@ -471,7 +471,7 @@ hr { border: 0\9 /* для IE8 */ }
 			</td>
 			<td width="10"></td>
 			<td>
-			  <font size="2">30700000000000001</font>
+			  <font size="2"><?=$rec_num?></font>
 			</td>
 		  </tr>
 		  <tr>
@@ -485,7 +485,7 @@ hr { border: 0\9 /* для IE8 */ }
 		<table class="default" rules="none" border="0" cellpadding="0" cellspacing="0" width="100%">
 		  <tbody><tr>
 			<td width="225">
-			  <font size="2">Оплата по счету № 246</font>
+			  <font size="2">Оплата по счету № <?=$id?></font>
 			</td>
 			<td width="10"></td>
 			<td></td>
@@ -516,7 +516,7 @@ hr { border: 0\9 /* для IE8 */ }
 			</td>
 			<td rowspan="4" width="10"></td>
 			<td>
-			  <font size="1">12312 rostber </font>
+			  <font size="1"><?=$_REQUEST['rec_name']?></font>
 			</td>
 		  </tr>
 		  <tr>
@@ -530,7 +530,7 @@ hr { border: 0\9 /* для IE8 */ }
 			  <font size="2">Адрес плательщика</font>
 			</td>
 			<td>
-			  <font size="1">123123,	Россия, Москва и Московская обл., Абрамцево, 123123123</font>
+			  <font size="1"><?=$_REQUEST['rec_address']?></font>
 			</td>
 		  </tr>
 		  <tr>
@@ -548,7 +548,7 @@ hr { border: 0\9 /* для IE8 */ }
 			  </font>
 			</td>
 			<td width="45">
-			  <font size="2">11675</font>
+			  <font size="2"><?=$summ?></font>
 			</td>
 			<td width="20">
 			  <font size="1"> руб. </font>

@@ -176,16 +176,6 @@ class shop_m extends MY_Model {
 			->order_by('RAND()')
 			->limit($limit_1);
 		$res = $this->db->get()->result();
-		if (!count ($res))
-		{
-			$this->db
-				->select('*')
-				->from('shop_items')
-				->where('published', 1)
-				->order_by('RAND()')
-				->limit($limit_1);
-			$res = $this->db->get()->result();
-		}
 		return $this->get_photos($res);	
 	}
 	

@@ -61,6 +61,8 @@ class shop extends Public_Controller {
 		
 		$this->data->items = $this->shop_m->set_prices( $this->pyrocache->model('shop_m', 'get_items', array($pagination, $id)) );
 		
+		$this->template->title( $this->data->group_current->title );
+		
 		$this->template->set('pagination', $pagination)->build('catalog/goods', $this->data);
 	}
 
@@ -85,6 +87,14 @@ class shop extends Public_Controller {
 		
 		$this->data->items = $this->shop_m->get_items($this->data->item->gi_group_id);
 		
+		$this->load->library('comments/comments', array(
+			'entry_id' 		=> $id,
+			'entry_title' 	=> $this->data->item->title,
+			'module' 		=> 'shop',
+			'singular' 		=> lang('shop.h1'),
+			'plural' 		=> lang('shop.h1'),
+		));
+			
 		$this->template->build('catalog/product', $this->data);
 	}
 	
@@ -141,15 +151,20 @@ class shop extends Public_Controller {
 			{
 				if ($payment->id == $_REQUEST['type_payment'])
 				{
-					if (!empty ($payment->redirect)) redirect('shop/'.$payment->redirect);
+					if (!empty ($payment->redirect)) 
+					{
+						redirect('shop/'.$payment->redirect);
+					}
 					else 
 					{
-						$id = $this->insert_order();
+						$this->insert_order();
+						setcookie('cart', '', 0, '/');
 						redirect('shop/finish');
 					}
 				}
 			}
-		}		
+			show_404();
+		}
 		else
 		{
 			$fields = array(
@@ -167,7 +182,7 @@ class shop extends Public_Controller {
 		}
 		
 		$this->template->set_breadcrumb(lang('shop.cart'), 'shop/cart/');
-		$this->template->set_breadcrumb(lang('shop.checkout'), 'shop/checkout/');
+		$this->template->set_breadcrumb(lang('shop.checkout'), false);
 		
 		$this->template->build('checkout/checkout', $this->data);
 	}
@@ -186,8 +201,15 @@ class shop extends Public_Controller {
 		
 		if (empty($_COOKIE['type_payment']) or empty($_COOKIE['type_delavery'])) show_404();
 		
-		$type_payment = $_COOKIE['type_payment'];
-		$type_delavery = $_COOKIE['type_delavery'];
+		$type_payment = $type_delavery = false;
+		
+		if (!empty($_COOKIE['type_payment'])) $type_payment = $_COOKIE['type_payment'];
+		if (!empty($_POST['type_payment'])) $type_payment = $_POST['type_payment'];
+
+		if (!empty($_COOKIE['type_delavery'])) $type_delavery = $_COOKIE['type_delavery'];
+		if (!empty($_POST['type_delavery'])) $type_delavery = $_POST['type_delavery'];
+		
+		if (empty($type_payment) or empty($type_delavery)) show_404();
 
 		$name = $this->data->name = !empty($_COOKIE['name']) ? $_COOKIE['name'] : null;
 		$email = $this->data->email = !empty($_COOKIE['email']) ? $_COOKIE['email'] : null;
@@ -241,6 +263,7 @@ class shop extends Public_Controller {
 	
 	/* формы оплаты */
 	
+	// оплача через банковскую квитанцию
 	function blank()
 	{	
 		if (empty($_REQUEST['blank']))
@@ -253,16 +276,16 @@ class shop extends Public_Controller {
 		else
 		{
 			$this->data->id = $this->shop_cart_m->next_insert_id('shop_orders');
+			
 			$this->data->rec_inn = $this->config->item('shop.rec_inn');
 			$this->data->rec_kpp = $this->config->item('shop.rec_kpp');
 			$this->data->rec_num = $this->config->item('shop.rec_num');
 			$this->data->rec_bank_address = $this->config->item('shop.rec_bank_address');
 			$this->data->rec_bik = $this->config->item('shop.rec_bik');
 			$this->data->rec_kor_sch = $this->config->item('shop.rec_kor_sch');
-			$this->data->rec_title = $this->config->item('shop.rec_title');
 			$this->data->rec_company = $this->config->item('shop.rec_company');
 			
-			$this->data->items = $this->shop_m->set_prices( $this->shop_cart_m->get_cart_items() );
+			$this->data->summ = $this->shop_cart_m->get_summ();
 			
 			$this->data->order_id = $this->insert_order();
 			
@@ -272,6 +295,27 @@ class shop extends Public_Controller {
 		
 			$this->template->build('checkout/finish', $this->data);
 		}
+	}
+	
+	// yandex money
+	function pay()
+	{
+		$this->data->summ = $this->shop_m->get_summ();
+		
+		$this->template->set_breadcrumb(lang('shop.cart'), 'shop/cart/');
+		$this->template->set_breadcrumb(lang('shop.checkout'), 'shop/checkout/');
+		$this->template->set_breadcrumb(lang('shop.pay'), false);
+	
+		$this->template->build('checkout/pay', $this->data);
+	}
+	
+	function pay_successful()
+	{
+		echo 1;
+	}
+	
+	function pay_complete()
+	{
 	}
 	
 	/* / формы оплаты */

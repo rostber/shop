@@ -365,6 +365,8 @@ class Admin extends Admin_Controller {
 				$this->session->set_flashdata('error', lang('shop.update_error'));
 				redirect('admin/shop/manage_order/' . $id);
 			}
+			
+			$this->pyrocache->delete_all('shop_m');
 		}
 
 		foreach($this->item_validation_rules as $rule)
@@ -592,6 +594,7 @@ class Admin extends Admin_Controller {
 					redirect('admin/shop/create_group_item');
 				}
 			}
+			$this->pyrocache->delete_all('shop_m');
 		}
 
 		foreach($this->validation_rules as $rule)
@@ -643,6 +646,8 @@ class Admin extends Admin_Controller {
 				$this->shop_admin_m->delete_order($id_value);
 			}
 		}
+		
+		$this->pyrocache->delete_all('shop_m');
 		
 		$this->session->set_flashdata('success', lang('shop.delete_success'));
 		redirect('admin/shop/orders');
